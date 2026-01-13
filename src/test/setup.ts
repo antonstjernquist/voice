@@ -23,11 +23,11 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
-global.requestAnimationFrame = vi.fn((cb) => {
+globalThis.requestAnimationFrame = vi.fn((cb) => {
   return setTimeout(cb, 16) as unknown as number;
 });
 
-global.cancelAnimationFrame = vi.fn((id) => {
+globalThis.cancelAnimationFrame = vi.fn((id) => {
   clearTimeout(id);
 });
 

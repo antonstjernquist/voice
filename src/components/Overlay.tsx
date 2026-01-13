@@ -10,7 +10,7 @@ const creamColorDim = "rgba(255, 253, 245, 0.5)";
 function StateVisualizer({ state, level }: { state: RecordingState; level: number }) {
   const barCount = 18;
   const [tick, setTick] = useState(0);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const animate = () => {

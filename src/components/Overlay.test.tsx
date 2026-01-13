@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor, act } from "@testing-library/react";
+import { render, waitFor, act } from "@testing-library/react";
 import { Overlay } from "./Overlay";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
@@ -347,7 +347,7 @@ describe("Overlay", () => {
     });
 
     it("cancels animation frame on unmount", async () => {
-      const cancelSpy = vi.spyOn(global, "cancelAnimationFrame");
+      const cancelSpy = vi.spyOn(globalThis, "cancelAnimationFrame");
 
       const { unmount } = render(<Overlay />);
 
