@@ -22,15 +22,21 @@ A minimal, privacy-focused voice-to-text desktop app for macOS. Record your voic
 
 ## Installation
 
-### Prerequisites
-
-- macOS 12.0 or later
-- [Rust](https://rustup.rs/) (for building from source)
-- [pnpm](https://pnpm.io/) (for building from source)
-
 ### Download
 
-Download the latest `.dmg` from [Releases](https://github.com/antonstjernquist/voice/releases).
+| Platform | Download | Notes |
+|----------|----------|-------|
+| macOS (Apple Silicon) | [Voice_0.1.0_aarch64.dmg](https://github.com/antonstjernquist/voice/releases/download/v0.1.0/Voice_0.1.0_aarch64.dmg) | M1/M2/M3 Macs |
+| macOS (Intel) | [Voice_0.1.0_x64.dmg](https://github.com/antonstjernquist/voice/releases/download/v0.1.0/Voice_0.1.0_x64.dmg) | Intel Macs |
+| Windows | [Voice_0.1.0_x64-setup.exe](https://github.com/antonstjernquist/voice/releases/download/v0.1.0/Voice_0.1.0_x64-setup.exe) | Windows 10/11 |
+
+Or browse all releases: [Releases](https://github.com/antonstjernquist/voice/releases)
+
+### Prerequisites (for building from source)
+
+- macOS 12.0 or later / Windows 10 or later
+- [Rust](https://rustup.rs/)
+- [pnpm](https://pnpm.io/)
 
 ### Build from Source
 
