@@ -26,8 +26,7 @@ jobs:
             name: macOS (Intel)
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
-            name: Windows (CUDA)
-            cuda: true
+            name: Windows
 
     name: Build - ${{ matrix.name }}
     runs-on: ${{ matrix.platform }}
@@ -57,26 +56,6 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Install CUDA toolkit (Windows)
-        if: matrix.cuda
-        uses: Jimver/cuda-toolkit@v0.2.18
-        id: cuda-toolkit
-        with:
-          cuda: '12.6.0'
-          method: 'network'
-          sub-packages: '["nvcc", "cudart", "cublas", "cublas_dev", "visual_studio_integration"]'
-
-      - name: Set CUDA environment (Windows)
-        if: matrix.cuda
-        shell: pwsh
-        run: |
-          echo "CUDA_PATH=${{ steps.cuda-toolkit.outputs.CUDA_PATH }}" >> $env:GITHUB_ENV
-          echo "CUDA_HOME=${{ steps.cuda-toolkit.outputs.CUDA_PATH }}" >> $env:GITHUB_ENV
-          echo "${{ steps.cuda-toolkit.outputs.CUDA_PATH }}\bin" >> $env:GITHUB_PATH
-          # Limit CUDA architectures to RTX 30xx (sm_86) and RTX 40xx (sm_89) for faster builds
-          echo "CMAKE_CUDA_ARCHITECTURES=86;89" >> $env:GITHUB_ENV
-          echo "CUDAARCHS=86;89" >> $env:GITHUB_ENV
-
       - name: Install dependencies
         run: pnpm install
 
@@ -85,7 +64,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --target ${{ matrix.target }} ${{ matrix.cuda && '-- --features cuda' || '' }}
+          args: --target ${{ matrix.target }}
 
       - name: Upload artifacts (macOS)
         if: matrix.platform == 'macos-latest'
