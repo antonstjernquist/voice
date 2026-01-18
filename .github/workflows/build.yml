@@ -73,6 +73,9 @@ jobs:
           echo "CUDA_PATH=${{ steps.cuda-toolkit.outputs.CUDA_PATH }}" >> $env:GITHUB_ENV
           echo "CUDA_HOME=${{ steps.cuda-toolkit.outputs.CUDA_PATH }}" >> $env:GITHUB_ENV
           echo "${{ steps.cuda-toolkit.outputs.CUDA_PATH }}\bin" >> $env:GITHUB_PATH
+          # Limit CUDA architectures to RTX 30xx (sm_86) and RTX 40xx (sm_89) for faster builds
+          echo "CMAKE_CUDA_ARCHITECTURES=86;89" >> $env:GITHUB_ENV
+          echo "CUDAARCHS=86;89" >> $env:GITHUB_ENV
 
       - name: Install dependencies
         run: pnpm install
