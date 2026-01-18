@@ -283,7 +283,11 @@ fn close_settings_window(app: AppHandle) {
 }
 
 fn setup_global_shortcut(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
+    #[cfg(target_os = "macos")]
     let shortcut = Shortcut::new(Some(Modifiers::SHIFT | Modifiers::META), Code::Space);
+
+    #[cfg(not(target_os = "macos"))]
+    let shortcut = Shortcut::new(Some(Modifiers::SHIFT | Modifiers::CONTROL), Code::Space);
 
     app.global_shortcut().on_shortcut(shortcut, {
         let app = app.clone();
@@ -425,10 +429,16 @@ pub fn run() {
             let menu = Menu::with_items(app, &[&settings_item, &separator, &quit_item])?;
 
             // Create system tray
+            #[cfg(target_os = "macos")]
+            let tooltip = "Voice - ⇧⌘Space to record";
+
+            #[cfg(not(target_os = "macos"))]
+            let tooltip = "Voice - Shift+Ctrl+Space to record";
+
             TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&menu)
-                .tooltip("Voice - ⇧⌘Space to record")
+                .tooltip(tooltip)
                 .on_menu_event(|app, event| {
                     match event.id.as_ref() {
                         "settings" => {
@@ -466,7 +476,11 @@ pub fn run() {
             if let Err(e) = setup_global_shortcut(&handle) {
                 eprintln!("Failed to setup global shortcut: {}", e);
             } else {
+                #[cfg(target_os = "macos")]
                 println!("Global shortcut registered: ⇧⌘Space");
+
+                #[cfg(not(target_os = "macos"))]
+                println!("Global shortcut registered: Shift+Ctrl+Space");
             }
 
             Ok(())
