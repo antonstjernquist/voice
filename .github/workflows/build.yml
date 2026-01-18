@@ -26,7 +26,8 @@ jobs:
             name: macOS (Intel)
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
-            name: Windows
+            name: Windows (CUDA)
+            cuda: true
 
     name: Build - ${{ matrix.name }}
     runs-on: ${{ matrix.platform }}
@@ -56,6 +57,14 @@ jobs:
         with:
           workspaces: src-tauri
 
+      - name: Install CUDA toolkit (Windows)
+        if: matrix.cuda
+        uses: Jimver/cuda-toolkit@v0.2.18
+        with:
+          cuda: '12.6.0'
+          method: 'network'
+          sub-packages: '["nvcc", "cudart"]'
+
       - name: Install dependencies
         run: pnpm install
 
@@ -63,8 +72,9 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUDA_PATH: ${{ env.CUDA_PATH }}
         with:
-          args: --target ${{ matrix.target }}
+          args: --target ${{ matrix.target }} ${{ matrix.cuda && '-- --features cuda' || '' }}
 
       - name: Upload artifacts (macOS)
         if: matrix.platform == 'macos-latest'
